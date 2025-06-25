@@ -27,10 +27,5 @@ Thumbs.db
 /public/storage
 .env
 .env.*
-/storage/*.key
-/storage/framework/*
-/storage/logs/*
-/storage/app/public/*
-/storage/app/*.*
 npm-debug.log 
 yarn-error.log

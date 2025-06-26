@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             );
                             let msg = match
                                 ? match[1].replace(/<[^>]+>/g, "").trim()
-                                : "Terjadi error pada server. Silakan coba lagi atau cek limit CloudConvert Anda.";
+                                : "Penggunaan Fitur ini telah mencapai batas. Silahkan coba lagi nanti.";
                             showNotification(msg, "warning");
                             hideLoadingSpinner();
                         });
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     hideLoadingSpinner();
                     console.error("Fetch error:", error);
                     showNotification(
-                        "Terjadi error pada server. Silakan coba lagi atau cek limit CloudConvert Anda.",
+                        "Penggunaan Fitur ini telah mencapai batas. Silahkan coba lagi nanti.",
                         "warning"
                     );
                 });

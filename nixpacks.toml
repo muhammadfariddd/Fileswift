@@ -20,17 +20,13 @@ cmds = [
 # Daftarkan semua ekstensi PHP yang dibutuhkan oleh proyek Anda.
 NIXPACKS_PHP_EXTENSIONS = "bcmath,exif,gd,imagick,pdo_mysql,zip"
 
-# --- PERBAIKAN: MENAIKKAN BATAS UPLOAD ---
-# Mengatur batas memori PHP.
+# Mengatur batas memori, ukuran upload, dan ukuran post.
 NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
-
-# Mengatur batas ukuran untuk satu file (misal: 500MB).
 NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
-
-# Mengatur batas total data POST (harus sedikit lebih besar dari upload_max_filesize).
 NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
 
 
-# Perintah yang dijalankan saat aplikasi dimulai.
-[start]
-cmd = "php artisan serve --host 0.0.0.0 --port $PORT"
+# --- PERBAIKAN: Bagian [start] dihapus ---
+# Kita membiarkan Nixpacks menggunakan server produksi defaultnya (Nginx + PHP-FPM)
+# yang akan menghormati pengaturan di atas, tidak lagi menggunakan 'php artisan serve'.
+

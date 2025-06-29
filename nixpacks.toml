@@ -1,5 +1,5 @@
 # File: nixpacks.toml
-# Konfigurasi ini adalah SATU-SATUNYA sumber kebenaran untuk build di Railway.
+# Versi final yang menggunakan file konfigurasi Nginx kustom.
 
 # Fase "setup" menginstal program yang dibutuhkan.
 [phases.setup]
@@ -28,8 +28,10 @@ NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
 NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
 NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
 
-# Konfigurasi batas untuk Nginx (untuk error 413).
-NIXPACKS_NGINX_CLIENT_MAX_BODY_SIZE = "512M"
+# --- PERBAIKAN FINAL: Menggunakan File Konfigurasi Nginx Kustom ---
+# Memberitahu Nixpacks untuk menggunakan file konfigurasi Nginx kita.
+# Path ini relatif terhadap root proyek Anda.
+NIXPACKS_NGINX_CUSTOM_CONF_FILE = "./config/nginx/nginx.conf"
 
-# --- Bagian [start] sengaja dihapus ---
-# Membiarkan Nixpacks menggunakan server produksi default (Nginx + PHP-FPM).
+# Kita tidak lagi memerlukan variabel NIXPACKS_NGINX_CLIENT_MAX_BODY_SIZE
+# karena sudah diatur di dalam file .conf

@@ -41,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleFile(file) {
         if (!file) return;
-        // Validasi ukuran file (maksimal 50MB)
-        if (file.size > 50 * 1024 * 1024) {
+        // Validasi ukuran file (maksimal 500MB)
+        if (file.size > 500 * 1024 * 1024) {
             showNotification(
-                "Ukuran file maksimal 50MB! Silakan pilih file yang lebih kecil.",
+                "Ukuran file maksimal 500MB! Silakan pilih file yang lebih kecil.",
                 "warning"
             );
             fileInput.value = "";
@@ -140,145 +140,5 @@ document.addEventListener("DOMContentLoaded", function () {
     function hideLoadingSpinner() {
         const overlay = document.getElementById("loading-overlay");
         if (overlay) overlay.style.display = "none";
-    }
-
-    if (form) {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            showLoadingSpinner();
-
-            const file = fileInput.files[0];
-            if (!file) {
-                showNotification("Pilih file terlebih dahulu.", "warning");
-                hideLoadingSpinner();
-                return;
-            }
-            const formatRadio = form.querySelector(
-                'input[name="target_format"]:checked'
-            );
-            if (!formatRadio) {
-                showNotification("Pilih format output.", "warning");
-                hideLoadingSpinner();
-                return;
-            }
-            const toFormat = formatRadio.value;
-
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("to_format", toFormat);
-            // Tambahkan CSRF token
-            const csrf = document.querySelector('input[name="_token"]');
-            if (csrf) {
-                formData.append("_token", csrf.value);
-            }
-
-            // Coba fetch terlebih dahulu
-            fetch(form.action, {
-                method: "POST",
-                body: formData,
-                credentials: "same-origin",
-            })
-                .then(async (response) => {
-                    // Coba parse sebagai JSON terlebih dahulu
-                    const contentType = response.headers.get("content-type");
-                    if (
-                        contentType &&
-                        contentType.includes("application/json")
-                    ) {
-                        return response.json().then((data) => {
-                            console.log("JSON response:", data);
-                            if (data.redirect) {
-                                console.log("Redirecting to:", data.redirect);
-                                window.location.href = data.redirect;
-                            } else if (data.error) {
-                                // Tambahan: alert khusus untuk CloudConvert limit
-                                if (
-                                    data.error
-                                        .toLowerCase()
-                                        .includes("cloudconvert")
-                                ) {
-                                    showNotification(
-                                        "❗ Penggunaan Fitur ini telah mencapai batas. Silahkan coba lagi nanti.\n" +
-                                            data.error,
-                                        "warning"
-                                    );
-                                } else {
-                                    showNotification(data.error, "warning");
-                                }
-                                hideLoadingSpinner();
-                            } else {
-                                showNotification(
-                                    "Konversi gagal. Cek file/format.",
-                                    "warning"
-                                );
-                                hideLoadingSpinner();
-                            }
-                        });
-                    } else {
-                        // Fallback: parse sebagai HTML untuk error
-                        return response.text().then((html) => {
-                            console.log("HTML response length:", html.length);
-                            // Cek apakah ada redirect di HTML response
-                            const redirectMatch = html.match(
-                                /window\.location\.href\s*=\s*['"]([^'"]+)['"]/
-                            );
-                            if (redirectMatch) {
-                                console.log(
-                                    "Found redirect in HTML:",
-                                    redirectMatch[1]
-                                );
-                                window.location.href = redirectMatch[1];
-                                return;
-                            }
-
-                            // Ambil pesan error dari response HTML
-                            let match = html.match(
-                                /<div[^>]*class=["'][^"']*bg-red-100[^"']*["'][^>]*>([\s\S]*?)<\/div>/
-                            );
-                            let msg = match
-                                ? match[1].replace(/<[^>]+>/g, "").trim()
-                                : "Penggunaan Fitur ini telah mencapai batas. Silahkan coba lagi nanti.";
-                            showNotification(msg, "warning");
-                            hideLoadingSpinner();
-                        });
-                    }
-                })
-                .catch((error) => {
-                    hideLoadingSpinner();
-                    console.error("Fetch error:", error);
-                    showNotification(
-                        "Penggunaan Fitur ini telah mencapai batas. Silahkan coba lagi nanti.",
-                        "warning"
-                    );
-                });
-        });
-    }
-
-    function showNotification(message, type = "info") {
-        // Create notification element
-        const notification = document.createElement("div");
-        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-            type === "success"
-                ? "bg-green-100 text-green-800 border border-green-300"
-                : type === "warning"
-                ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
-                : "bg-blue-100 text-blue-800 border border-blue-300"
-        }`;
-        notification.innerHTML = `
-            <div class="flex items-center">
-                <span class="font-medium">${message}</span>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-gray-500 hover:text-gray-700">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-        `;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 5000);
     }
 });

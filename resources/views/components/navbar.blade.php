@@ -1,4 +1,4 @@
-<!-- resources/views/components/navbar.blade.php -->
+{{-- <!-- resources/views/components/navbar.blade.php -->
 <nav class="fixed top-0 w-full z-50 bg-transparent transition-colors duration-300" id="navbar">
     <div class="container-fluid mx-auto px-6 py-2">
         <div class="flex items-center justify-between">
@@ -111,4 +111,4 @@
             });
         }
     });
-</script>
+</script> --}}

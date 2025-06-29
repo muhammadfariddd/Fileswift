@@ -15,6 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
         rel="stylesheet">
 
+    <!-- Alpine -->
+    <script defer src="https://unpkg.com/alpinejs@3.12.1/dist/cdn.min.js"></script>
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
@@ -130,6 +133,63 @@
                 animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
             }
         }
+
+        .toast-container {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #f5c6cb;
+            background-color: #f8d7da;
+            color: #721c24;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideInFadeIn 0.5s forwards, slideOutFadeOut 0.5s 5s forwards;
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            margin-right: 0.75rem;
+        }
+
+        .toast-close-button {
+            margin-left: 1.5rem;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: #721c24;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .toast-close-button:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideInFadeIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutFadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
     </style>
 
     @stack('styles')
@@ -138,7 +198,7 @@
 <body class="bg-gray-50 overflow-x-hidden">
 
     <!-- Navigation -->
-    @include('components.navbar')
+    {{-- @include('components.navbar') --}}
 
     <!-- Main Content -->
     <main>

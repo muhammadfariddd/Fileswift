@@ -3,12 +3,27 @@
 @section('title', 'Kompres File')
 
 @section('content')
-    <div class="container mx-auto max-w-5xl p-6 md:p-10 mt-5">
+    <div class="container mx-auto max-w-5xl p-6 md:p-8">
 
         <!-- Judul -->
         <header class="text-center my-8">
-            <h1 class="text-3xl md:text-5xl font-bold text-slate-800">Compress Your File</h1>
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-800">Kompres File Anda</h1>
         </header>
+
+        @if (session('error'))
+            <div id="toast-alert" class="toast-container" role="alert">
+                <div class="toast-icon">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <span>{{ session('error') }}</span>
+                <button type="button" class="toast-close-button"
+                    onclick="this.parentElement.style.display='none'">&times;</button>
+            </div>
+        @endif
 
         <main>
             <!-- Form Upload & Dropzone -->
@@ -56,7 +71,7 @@
                                     d="M11 3.75a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5h1.75V4.5a.75.75 0 01.75-.75z">
                                 </path>
                             </svg>
-                            CHOOSE FILES
+                            PILIH FILE
                         </button>
                         {{-- <button type="button"
                             class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-3 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-(--color-success) cursor-pointer focus:z-10">
@@ -70,7 +85,11 @@
                     </div>
 
                     <!-- Teks "Drag and Drop" -->
-                    <p class="mt-4 text-(--color-success)">or drop files here</p>
+                    <p class="mt-4 text-(--color-success)">atau seret dan lepaskan file di sini</p>
+
+                    <!-- Catatan tentang ukuran file -->
+                    <p class="mt-2 text-white/70 text-sm">Maksimal ukuran file: 500MB</p>
+
 
                     <!-- Info File -->
                     <div id="file-info" class="hidden mt-4"></div>

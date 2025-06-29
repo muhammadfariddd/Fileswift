@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use App\Services\Compression\CompressorFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->singleton(CompressorFactory::class, function ($app) { // <--- TAMBAHKAN BLOK INI
+            return new CompressorFactory();
+        });
     }
 
     /**

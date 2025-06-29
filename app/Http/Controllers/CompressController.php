@@ -1,17 +1,23 @@
 <?php
 
+// File: app/Http/Controllers/CompressController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Response;
-use Intervention\Image\ImageManager;
-
-
+use App\Services\Compression\CompressorFactory; // Pastikan path ini benar
 
 class CompressController extends Controller
 {
+    protected $compressorFactory;
+
+    // Gunakan dependency injection untuk memasukkan factory kita
+    public function __construct(CompressorFactory $compressorFactory)
+    {
+        $this->compressorFactory = $compressorFactory;
+    }
+
     public function index()
     {
         return view('compress.index');
@@ -19,60 +25,64 @@ class CompressController extends Controller
 
     public function compress(Request $request)
     {
+        // Validasi file. 2GB = 2097152 KB.
         $request->validate([
-            'file' => 'required|file|max:51200', // max 50MB
+            'file' => 'required|file|max:2097152',
         ]);
 
         $file = $request->file('file');
         $originalName = $file->getClientOriginalName();
         $ext = strtolower($file->getClientOriginalExtension());
-        $filename = Str::random(16) . '.' . $ext;
+
+        // Dapatkan strategi kompresi yang sesuai dari factory
+        try {
+            $compressor = $this->compressorFactory->getCompressorFor($ext);
+        } catch (\Exception $e) {
+            // --- PERBAIKAN DI SINI ---
+            // Menggunakan pesan error kustom yang lebih ramah pengguna.
+            $customMessage = 'Format file tidak didukung. Hanya gambar, PDF, video, audio, dan dokumen teks yang diperbolehkan.';
+            return back()->with('error', $customMessage);
+        }
+
+        // Siapkan path output
+        $filename = Str::random(16) . '.' . $compressor->getOutputExtension($ext);
         $outputPath = storage_path('app/public/compressed');
         if (!file_exists($outputPath)) {
             mkdir($outputPath, 0777, true);
         }
         $outputFile = $outputPath . '/' . $filename;
         $beforeSize = $file->getSize();
-        $afterSize = 0;
 
-        // Kompresi untuk gambar
-        if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
-            try {
-                $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
-                $img = $manager->read($file->getRealPath());
-                $quality = 60;
-                $img->toJpeg()->save($outputFile, $quality);
-                $afterSize = filesize($outputFile);
-            } catch (\Exception $e) {
-                return back()->with('error', 'Gagal mengompres gambar: ' . $e->getMessage());
-            }
-        } else {
-            // Untuk file non-gambar, hanya simpan ulang (simulasi kompresi)
-            $file->move($outputPath, $filename);
-            $afterSize = filesize($outputFile);
+        // Lakukan kompresi menggunakan strategi yang dipilih
+        try {
+            $compressor->compress($file->getRealPath(), $outputFile);
+        } catch (\Exception $e) {
+            // Tangkap error spesifik dari proses kompresi
+            return back()->with('error', 'Gagal memproses file: ' . $e->getMessage());
         }
 
-        // Simpan info ke session dan redirect ke result
-        session([
+        $afterSize = file_exists($outputFile) ? filesize($outputFile) : 0;
+
+        return redirect()->route('compress.result', ['id' => $filename])->with([
             'compressed_original_name' => $originalName,
-            'compressed_filename' => $filename,
             'compressed_before_size' => $beforeSize,
             'compressed_after_size' => $afterSize,
         ]);
-        return redirect()->route('compress.result', ['id' => $filename]);
     }
 
     public function result($id)
     {
-        $outputFile = storage_path('app/public/compressed/' . $id);
-        if (!file_exists($outputFile)) {
-            abort(404, 'File tidak ditemukan');
+        $originalName = session()->get('compressed_original_name', 'file');
+        $beforeSize = session()->get('compressed_before_size', 0);
+        $afterSize = session()->get('compressed_after_size', 0);
+
+        if ($beforeSize === 0 && !session()->has('compressed_original_name')) {
+            abort(404, 'File tidak ditemukan atau sesi telah berakhir.');
         }
-        $originalName = session('compressed_original_name', $id);
-        $beforeSize = session('compressed_before_size', 0);
-        $afterSize = session('compressed_after_size', 0);
-        $downloadUrl = route('compress.download', ['id' => $id]);
+
+        $downloadUrl = route('compress.download', ['id' => $id, 'name' => 'compressed-' . $originalName]);
         $finalName = 'compressed-' . $originalName;
+
         return view('compress.result', compact('finalName', 'downloadUrl', 'beforeSize', 'afterSize'));
     }
 
@@ -80,8 +90,9 @@ class CompressController extends Controller
     {
         $outputFile = storage_path('app/public/compressed/' . $id);
         if (!file_exists($outputFile)) {
-            abort(404, 'File tidak ditemukan');
+            abort(404, 'File tidak ditemukan.');
         }
+
         $finalName = request('name', $id);
         return response()->download($outputFile, $finalName)->deleteFileAfterSend(false);
     }

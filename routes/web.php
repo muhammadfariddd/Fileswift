@@ -19,12 +19,6 @@ Route::post('/compress', [CompressController::class, 'compress'])->name('compres
 Route::get('/compress/result/{id}', [CompressController::class, 'result'])->name('compress.result');
 Route::get('/compress/download/{id}', [CompressController::class, 'download'])->name('compress.download');
 
-// Merge PDF Routes
-Route::get('/merge', [MergeController::class, 'index'])->name('merge.index');
-Route::post('/merge', [MergeController::class, 'merge'])->name('merge.process');
-Route::get('/merge/result/{id}', [MergeController::class, 'result'])->name('merge.result');
-Route::get('/merge/download/{id}', [MergeController::class, 'download'])->name('merge.download');
-
 // Page Routes
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');

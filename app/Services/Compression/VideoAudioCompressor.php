@@ -1,7 +1,6 @@
 <?php
 // File: app/Services/Compression/VideoAudioCompressor.php
 
-// --- PERBAIKAN: Menambahkan namespace yang hilang ---
 namespace App\Services\Compression;
 
 use FFMpeg\FFMpeg;
@@ -13,28 +12,36 @@ class VideoAudioCompressor implements CompressorStrategy
     public function compress(string $inputPath, string $outputPath): void
     {
         try {
-            $ffmpeg = FFMpeg::create([
-                'timeout' => 3600, // Menambah timeout untuk file besar
-                'ffmpeg.threads' => 12, // Menambah thread jika server mendukung
-            ]);
+            // Konfigurasi ini secara eksplisit menunjuk ke lokasi standar
+            // ffmpeg dan ffprobe di server Linux setelah diinstal via apt-get.
+            $config = [
+                'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+                'ffprobe.binaries' => '/usr/bin/ffprobe',
+                'timeout'          => 3600, // Timeout 1 jam
+                'ffmpeg.threads'   => 4,    // Batasi thread agar tidak membebani server
+            ];
+
+            $ffmpeg = FFMpeg::create($config);
             $media = $ffmpeg->open($inputPath);
             $ext = strtolower(pathinfo($outputPath, PATHINFO_EXTENSION));
 
             if (in_array($ext, ['mp4', 'mov', 'avi', 'mkv', 'webm'])) {
-                $format = new X264('libmp3lame', 'libx264');
-                // BITRATE DIUBAH: dari 1000 menjadi 500 untuk ukuran lebih kecil.
-                $format->setKiloBitrate(500);
+                // --- PERBAIKAN: Mengganti codec audio ---
+                // Menggunakan 'aac' yang lebih standar daripada 'libmp3lame' untuk video MP4.
+                // Ini jauh lebih mungkin tersedia di server hosting.
+                $format = new X264('aac', 'libx264');
+                $format->setKiloBitrate(400);
             } elseif (in_array($ext, ['mp3', 'wav', 'aac', 'ogg', 'flac'])) {
                 $format = new Mp3();
-                // BITRATE DIUBAH: dari 128 menjadi 96.
-                $format->setAudioKiloBitrate(96);
+                $format->setAudioKiloBitrate(80);
             } else {
                 throw new \Exception("Format media tidak didukung.");
             }
 
             $media->save($format, $outputPath);
         } catch (\Exception $e) {
-            throw new \Exception('Gagal mengompresi file media. Pastikan FFMpeg terinstal. Error: ' . $e->getMessage());
+            // Lemparkan lagi error dengan pesan yang lebih spesifik
+            throw new \Exception('Gagal mengompresi file media. Pastikan FFMpeg terinstal dengan benar di server. Error: ' . $e->getMessage());
         }
     }
 

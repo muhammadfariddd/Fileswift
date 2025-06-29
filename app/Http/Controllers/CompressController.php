@@ -38,8 +38,7 @@ class CompressController extends Controller
         try {
             $compressor = $this->compressorFactory->getCompressorFor($ext);
         } catch (\Exception $e) {
-            // --- PERBAIKAN DI SINI ---
-            // Menggunakan pesan error kustom yang lebih ramah pengguna.
+            // Pesan untuk format yang tidak didukung
             $customMessage = 'Format file tidak didukung. Hanya gambar, PDF, video, audio, dan dokumen teks yang diperbolehkan.';
             return back()->with('error', $customMessage);
         }
@@ -57,8 +56,10 @@ class CompressController extends Controller
         try {
             $compressor->compress($file->getRealPath(), $outputFile);
         } catch (\Exception $e) {
-            // Tangkap error spesifik dari proses kompresi
-            return back()->with('error', 'Gagal memproses file: ' . $e->getMessage());
+            // Pesan error yang lebih ramah pengguna jika proses kompresi gagal
+            $customMessage = 'Maaf, terjadi kesalahan saat memproses file Anda. Silakan coba lagi.';
+            // Untuk debugging, Anda bisa mencatat error asli ke log: \Log::error($e->getMessage());
+            return back()->with('error', $customMessage);
         }
 
         $afterSize = file_exists($outputFile) ? filesize($outputFile) : 0;

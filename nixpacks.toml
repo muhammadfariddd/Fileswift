@@ -23,17 +23,16 @@ cmds = [
 
 # Di sini kita mendefinisikan variabel lingkungan khusus untuk proses build Nixpacks.
 [variables]
-# Daftarkan semua ekstensi PHP yang dibutuhkan oleh proyek Anda.
-# Nixpacks akan memastikan semua ekstensi ini aktif.
-NIXPACKS_PHP_EXTENSIONS = [
-    "bcmath",
-    "exif",
-    "gd",       # Diperlukan oleh Intervention Image (Driver default)
-    "imagick",  # Diperlukan oleh Intervention Image (Driver yang lebih efisien)
-    "pdo_mysql",# Untuk koneksi database MySQL/MariaDB
-    "zip"       # Untuk membuat file .zip
-]
+# --- PERBAIKAN: Format diubah dari array menjadi satu string yang dipisahkan koma ---
+NIXPACKS_PHP_EXTENSIONS = "bcmath,exif,gd,imagick,pdo_mysql,zip"
+
+# Menaikkan batas memori PHP di server Railway.
+NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
+NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
+NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
+
 
 # Perintah yang dijalankan saat aplikasi dimulai.
 [start]
 cmd = "php artisan serve --host 0.0.0.0 --port $PORT"
+

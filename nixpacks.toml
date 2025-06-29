@@ -2,16 +2,10 @@
 # Konfigurasi ini memberitahu Railway bagaimana cara membangun lingkungan untuk aplikasi Laravel Anda.
 
 # Fase "setup" dijalankan sebelum proses build utama.
-# Di sini kita menginstal paket-paket sistem yang dibutuhkan oleh aplikasi kita.
 [phases.setup]
 aptPkgs = [
-    # Wajib untuk kompresi PDF.
     "ghostscript", 
-
-    # Wajib untuk kompresi video dan audio.
     "ffmpeg",
-
-    # Wajib agar ekstensi PHP 'imagick' bisa berfungsi dengan baik.
     "libmagickwand-dev"
 ]
 
@@ -23,16 +17,20 @@ cmds = [
 
 # Di sini kita mendefinisikan variabel lingkungan khusus untuk proses build Nixpacks.
 [variables]
-# --- PERBAIKAN: Format diubah dari array menjadi satu string yang dipisahkan koma ---
+# Daftarkan semua ekstensi PHP yang dibutuhkan oleh proyek Anda.
 NIXPACKS_PHP_EXTENSIONS = "bcmath,exif,gd,imagick,pdo_mysql,zip"
 
-# Menaikkan batas memori PHP di server Railway.
+# --- PERBAIKAN: MENAIKKAN BATAS UPLOAD ---
+# Mengatur batas memori PHP.
 NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
+
+# Mengatur batas ukuran untuk satu file (misal: 500MB).
 NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
+
+# Mengatur batas total data POST (harus sedikit lebih besar dari upload_max_filesize).
 NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
 
 
 # Perintah yang dijalankan saat aplikasi dimulai.
 [start]
 cmd = "php artisan serve --host 0.0.0.0 --port $PORT"
-

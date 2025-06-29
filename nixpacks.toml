@@ -20,13 +20,17 @@ cmds = [
 # Daftarkan semua ekstensi PHP yang dibutuhkan oleh proyek Anda.
 NIXPACKS_PHP_EXTENSIONS = "bcmath,exif,gd,imagick,pdo_mysql,zip"
 
-# Mengatur batas memori, ukuran upload, dan ukuran post.
+# Mengatur batas memori, ukuran upload, dan ukuran post UNTUK PHP.
 NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
 NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
 NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
 
+# --- PERBAIKAN FINAL: Menambahkan Konfigurasi untuk Nginx ---
+# Baris ini secara langsung memberitahu Nginx untuk menerima file hingga 512M.
+# Ini adalah perbaikan untuk error "413 Request Entity Too Large".
+NIXPACKS_NGINX_CLIENT_MAX_BODY_SIZE = "512M"
 
-# --- PERBAIKAN: Bagian [start] dihapus ---
+
+# --- Bagian [start] sengaja dihapus ---
 # Kita membiarkan Nixpacks menggunakan server produksi defaultnya (Nginx + PHP-FPM)
-# yang akan menghormati pengaturan di atas, tidak lagi menggunakan 'php artisan serve'.
-
+# yang akan menghormati semua pengaturan di atas.

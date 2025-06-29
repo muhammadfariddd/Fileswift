@@ -1,7 +1,7 @@
 # File: nixpacks.toml
-# Konfigurasi ini memberitahu Railway bagaimana cara membangun lingkungan untuk aplikasi Laravel Anda.
+# Konfigurasi ini adalah SATU-SATUNYA sumber kebenaran untuk build di Railway.
 
-# Fase "setup" dijalankan sebelum proses build utama.
+# Fase "setup" menginstal program yang dibutuhkan.
 [phases.setup]
 aptPkgs = [
     "ghostscript", 
@@ -9,28 +9,27 @@ aptPkgs = [
     "libmagickwand-dev"
 ]
 
-# Fase "build" adalah saat Railway menjalankan perintah seperti 'composer install'.
+# Fase "build" menjalankan semua perintah build secara berurutan.
 [phases.build]
 cmds = [
-    "composer install --no-dev --optimize-autoloader"
+    "composer install --no-dev --optimize-autoloader",
+    "npm install",
+    "npm run build",
+    "php artisan storage:link"
 ]
 
-# Di sini kita mendefinisikan variabel lingkungan khusus untuk proses build Nixpacks.
+# Variabel untuk mengonfigurasi PHP dan Nginx.
 [variables]
-# Daftarkan semua ekstensi PHP yang dibutuhkan oleh proyek Anda.
+# Ekstensi PHP yang dibutuhkan.
 NIXPACKS_PHP_EXTENSIONS = "bcmath,exif,gd,imagick,pdo_mysql,zip"
 
-# Mengatur batas memori, ukuran upload, dan ukuran post UNTUK PHP.
+# Konfigurasi batas untuk PHP.
 NIXPACKS_PHP_INI_MEMORY_LIMIT = "1024M"
 NIXPACKS_PHP_INI_UPLOAD_MAX_FILESIZE = "500M"
 NIXPACKS_PHP_INI_POST_MAX_SIZE = "512M"
 
-# --- PERBAIKAN FINAL: Menambahkan Konfigurasi untuk Nginx ---
-# Baris ini secara langsung memberitahu Nginx untuk menerima file hingga 512M.
-# Ini adalah perbaikan untuk error "413 Request Entity Too Large".
+# Konfigurasi batas untuk Nginx (untuk error 413).
 NIXPACKS_NGINX_CLIENT_MAX_BODY_SIZE = "512M"
 
-
 # --- Bagian [start] sengaja dihapus ---
-# Kita membiarkan Nixpacks menggunakan server produksi defaultnya (Nginx + PHP-FPM)
-# yang akan menghormati semua pengaturan di atas.
+# Membiarkan Nixpacks menggunakan server produksi default (Nginx + PHP-FPM).

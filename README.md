@@ -1,61 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://github.com/muhammadfariddd/Fileswift/blob/master/public/images/logo-new.png" alt="Fileswift Logo" width="300">
 </p>
+<p align="center"><strong>Sistem Manajemen File Fullstack dengan Laravel + Tailwind CSS</strong></p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Fileswift** adalah aplikasi manajemen file fullstack yang modern, responsif, dan efisien. Dirancang untuk memudahkan proses **unggahan**, **penyimpanan**, dan **penampilan file** secara cepat dan aman. Backend dibangun menggunakan **Laravel**, sedangkan frontend menggunakan **Tailwind CSS** untuk tampilan minimalis yang tetap menarik di berbagai perangkat.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Fitur Utama
 
-## Learning Laravel
+- ✅ **Backend Laravel** — Penanganan request, validasi, dan penyimpanan file yang aman.
+- ✅ **UI Responsif dan Modern** — Dibangun dengan Tailwind CSS untuk tampilan ringan dan mobile-friendly.
+- ✅ **Unggah File Mudah** — Pilih file dari perangkat, lalu unggah langsung ke server.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🖼️ Tampilan Aplikasi
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- 🏠 Home Section
+  
+![image](https://github.com/user-attachments/assets/9d467731-968f-43d9-ba27-9a5a96fe2110)
 
-## Laravel Sponsors
+- 📤 Halaman Unggah File
+  
+![image](https://github.com/user-attachments/assets/fc5c1dde-9daa-4d37-8c9f-e9a2588962e6)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ Tumpukan Teknologi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Komponen   | Teknologi           | Deskripsi                                                  |
+|------------|---------------------|-------------------------------------------------------------|
+| **Backend** | Laravel             | Framework PHP modern untuk RESTful API dan validasi        |
+| **Frontend** | Blade + Tailwind CSS | UI responsif dan elegan tanpa CSS tambahan                |
+|            | Alpine.js | Untuk menambahkan interaktivitas ringan jika dibutuhkan |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Cara Memulai
 
-## Code of Conduct
+Ikuti panduan berikut untuk menjalankan Fileswift secara lokal di perangkat Anda.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 🧾 Prasyarat
 
-## Security Vulnerabilities
+- PHP >= 8.1
+- Composer
+- Node.js + npm
+- Git
+- MySQL / SQLite *(opsional untuk fitur tambahan)*
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+### ⚙️ Instalasi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone repositori**
+   ```bash
+   git clone https://github.com/muhammadfariddd/fileswift-laravel.git
+   cd fileswift-laravel
+   ```
+
+2. **Clone repositori**
+   ```bash
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+   php artisan storage:link
+   ```
+   
+3. **Instal dan build frontend**
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+4. **Jalankan server lokal**
+   ```bash
+   php artisan serve
+   ```
+
+---
+
+## 📂 Struktur Proyek
+
+```bash
+/fileswift-laravel
+├── app/                  # Logika aplikasi Laravel
+├── public/               # Aset publik (file upload tersimpan di sini)
+├── resources/
+│   └── views/            # Template Blade untuk frontend
+├── routes/
+│   └── web.php           # Rute aplikasi web
+├── storage/app/public/   # Lokasi penyimpanan file upload
+├── .env.example          # Contoh konfigurasi aplikasi
+├── tailwind.config.js    # Konfigurasi Tailwind CSS
+├── package.json          # Dependensi frontend
+└── README.md             # Dokumentasi proyek
+```
+
+## 🤝 Kontribusi
+Kami sangat terbuka terhadap kontribusi! Ikuti langkah-langkah berikut untuk berkontribusi:
+
+1. Fork repositori ini.
+
+2. Buat branch fitur baru:
+```bash
+git checkout -b fitur/NamaFitur
+```
+
+3. Commit perubahan:
+```bash
+git commit -m "Menambahkan fitur X"
+```
+
+4. Push ke repo Anda:
+```bash
+git push origin fitur/NamaFitur
+```
+
+5. Buka Pull Request ke branch main.
+
+---
+
+
+<p align="center">© 2025 Fileswift - Made with ❤️ in Indonesia</p> 
